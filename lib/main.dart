@@ -1,125 +1,180 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MinesweeperApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class MinesweeperApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'FlutterSweeper',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MinesweeperScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class MinesweeperScreen extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MinesweeperScreenState createState() => _MinesweeperScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MinesweeperScreenState extends State<MinesweeperScreen> {
+  int rows = 10;
+  int cols = 10;
+  int totalMines = 20;
+  late List<List<bool>> revealed;
+  late List<List<bool>> hasMine;
+  bool gameover = false;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    initializeGame();
+  }
+
+  void initializeGame() {
+    revealed = List.generate(rows, (i) => List.filled(cols, false));
+    hasMine = List.generate(rows, (i) => List.filled(cols, false));
+
+    // Randomly place mines
+    Random random = Random();
+    int minesPlaced = 0;
+    while (minesPlaced < totalMines) {
+      int row = random.nextInt(rows);
+      int col = random.nextInt(cols);
+      if (!hasMine[row][col]) {
+        hasMine[row][col] = true;
+        minesPlaced++;
+      }
+    }
+  }
+
+  void revealTile(int row, int col) {
+    if (revealed[row][col] || gameover) return;
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      revealed[row][col] = true;
+      if (hasMine[row][col]) {
+        gameover = true;
+        // Game over logic here
+        return;
+      }
+      // Check neighboring tiles
+      int adjacentMines = 0;
+      for (int dr = -1; dr <= 1; dr++) {
+        for (int dc = -1; dc <= 1; dc++) {
+          int r = row + dr;
+          int c = col + dc;
+          if (r >= 0 && r < rows && c >= 0 && c < cols) {
+            if (hasMine[r][c]) {
+              adjacentMines++;
+            }
+          }
+        }
+      }
+      if (adjacentMines == 0) {
+        // Automatically reveal neighboring tiles if no adjacent mines
+        for (int dr = -1; dr <= 1; dr++) {
+          for (int dc = -1; dc <= 1; dc++) {
+            int r = row + dr;
+            int c = col + dc;
+            if (r >= 0 && r < rows && c >= 0 && c < cols) {
+              revealTile(r, c);
+            }
+          }
+        }
+      }
     });
+  }
+
+  Widget buildGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: rows * cols,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: cols,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        int row = index ~/ cols;
+        int col = index % cols;
+        return GestureDetector(
+          onTap: () => revealTile(row, col),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              color: revealed[row][col] ? Colors.grey[200] : Colors.white,
+            ),
+            child: Center(
+              child: revealed[row][col]
+                  ? hasMine[row][col]
+                      ? Icon(Icons.dangerous)
+                      : Text(
+                          getNeighborMines(row, col).toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: getTextColor(getNeighborMines(row, col)),
+                          ),
+                        )
+                  : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  int getNeighborMines(int row, int col) {
+    int count = 0;
+    for (int dr = -1; dr <= 1; dr++) {
+      for (int dc = -1; dc <= 1; dc++) {
+        int r = row + dr;
+        int c = col + dc;
+        if (r >= 0 && r < rows && c >= 0 && c < cols) {
+          if (hasMine[r][c]) {
+            count++;
+          }
+        }
+      }
+    }
+    return count;
+  }
+
+  Color getTextColor(int numMines) {
+    switch (numMines) {
+      case 1:
+        return Colors.blue;
+      case 2:
+        return Colors.green;
+      case 3:
+        return Colors.red;
+      case 4:
+        return Colors.purple;
+      case 5:
+        return Colors.orange;
+      case 6:
+        return Colors.teal;
+      case 7:
+        return Colors.yellow;
+      case 8:
+        return Colors.grey;
+      default:
+        return Colors.black;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('FlutterSweeper'),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+        child: buildGrid(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

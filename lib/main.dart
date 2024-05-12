@@ -4,10 +4,12 @@ import 'dart:math';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
 void main() {
-  runApp(MinesweeperApp());
+  runApp(const MinesweeperApp());
 }
 
 class MinesweeperApp extends StatelessWidget {
+  const MinesweeperApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,12 +17,14 @@ class MinesweeperApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoadingScreen(),
+      home: const LoadingScreen(),
     );
   }
 }
 
 class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({super.key});
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -32,7 +36,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     // Simulate loading time with a delay
-    Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
+    Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
       setState(() {
         _progress += 0.01;
         if (_progress >= 1.0) {
@@ -40,7 +44,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           // Navigate to next screen after loading
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MainMenuScreen()),
+            MaterialPageRoute(builder: (context) => const MainMenuScreen()),
           );
         }
       });
@@ -52,7 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   return Scaffold(
     backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
     appBar: AppBar(
-      title: Text(''),
+      title: Text(' '),
       centerTitle: true,
     ),
     body: Column(
@@ -70,7 +74,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           height: 20.0, // Adjust the height of the progress bar
           child: LinearProgressIndicator(
             backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the progress bar
-            valueColor: AlwaysStoppedAnimation<Color>(const Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
+            valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
             value: _progress, // Set the value of the progress bar
           ),
         ),
@@ -95,11 +99,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
 }
 
 class MainMenuScreen extends StatelessWidget {
+  const MainMenuScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Main Menu'),
+        title: const Text('Main Menu'),
       ),
       body: Center(
         child: Column(
@@ -113,13 +119,13 @@ class MainMenuScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => DifficultySelectionScreen()),
                 );
               },
-              child: Text('Play'),
+              child: const Text('Play'),
             ),
             ElevatedButton(
               onPressed: () {
                 // Navigate to settings screen
               },
-              child: Text('Settings'),
+              child: const Text('Settings'),
             ),
           ],
         ),
@@ -129,11 +135,13 @@ class MainMenuScreen extends StatelessWidget {
 }
 
 class DifficultySelectionScreen extends StatelessWidget {
+  const DifficultySelectionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose Difficulty'),
+        title: const Text('Choose Difficulty'),
       ),
       body: Center(
         child: Column(
@@ -153,14 +161,14 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Easy'),
+              child: const Text('Easy'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MinesweeperScreen(
+                    builder: (context) => const MinesweeperScreen(
                       rows: 6,
                       cols: 6,
                       totalMines: 10,
@@ -168,14 +176,14 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Medium'),
+              child: const Text('Medium'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MinesweeperScreen(
+                    builder: (context) => const MinesweeperScreen(
                       rows: 10,
                       cols: 10,
                       totalMines: 20,
@@ -183,7 +191,7 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Hard'),
+              child: const Text('Hard'),
             ),
           ],
         ),
@@ -197,7 +205,7 @@ class MinesweeperScreen extends StatefulWidget {
   final int cols;
   final int totalMines;
 
-  MinesweeperScreen({
+  const MinesweeperScreen({super.key, 
     required this.rows,
     required this.cols,
     required this.totalMines,
@@ -287,7 +295,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                   startTimer();
                 });
               },
-              child: Text('Play Again'),
+              child: const Text('Play Again'),
             ),
           ],
         );
@@ -372,7 +380,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   Widget buildGrid() {
   return Container(
     alignment: Alignment.center,
-    padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+    padding: const EdgeInsets.all(16.0), // Adjust the padding as needed
     child: GridView.builder(
       shrinkWrap: true,
       itemCount: rows * cols,
@@ -385,21 +393,21 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         return GestureDetector(
           onTap: () => revealTile(row, col),
           child: Container(
-            margin: EdgeInsets.all(4.0), // Add margin to each tile
+            margin: const EdgeInsets.all(4.0), // Add margin to each tile
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromRGBO(189, 91, 64, 1)),
+              border: Border.all(color: const Color.fromRGBO(189, 91, 64, 1)),
               color: revealed[row][col]
-                  ? Color.fromARGB(255, 150, 82, 5)
+                  ? const Color.fromARGB(255, 150, 82, 5)
                   : allRevealed
-                      ? Color.fromARGB(255, 21, 0, 202)
-                      : Color.fromARGB(255, 4, 230, 15),
+                      ? const Color.fromARGB(255, 21, 0, 202)
+                      : const Color.fromARGB(255, 4, 230, 15),
             ),
             child: Center(
               child: revealed[row][col]
                   ? hasMine[row][col]
                       ? AnimatedOpacity(
                           opacity: 1.0,
-                          duration: Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 500),
                           child: Image.asset(
                             'assets/bomb-icon-2.png',
                             width: 36,
@@ -471,7 +479,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       var currentTime = DateTime.now();
       setState(() {
         secondsElapsed = currentTime.difference(startTime).inSeconds;
@@ -484,9 +492,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: Text('BOMBA'),
+      title: const Text('BOMBA'),
       bottom: PreferredSize(
-        preferredSize: Size.fromHeight(120),
+        preferredSize: const Size.fromHeight(120),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Row(
@@ -499,17 +507,17 @@ Widget build(BuildContext context) {
                     width: 30.0, // Adjust width as needed
                     height: 30.0, // Adjust height as needed
                   ),
-                  SizedBox(width: 5.0),
+                  const SizedBox(width: 5.0),
                   Text(
                     getFormattedTime(secondsElapsed),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              SizedBox(width: 20.0), // Adjust spacing between timer and dangerous icon
+              const SizedBox(width: 20.0), // Adjust spacing between timer and dangerous icon
               Row(
                 children: [
                   Image.asset(
@@ -517,13 +525,13 @@ Widget build(BuildContext context) {
                     width: 30.0, // Adjust width as needed
                     height: 30.0, // Adjust height as needed
                   ),
-                  SizedBox(width: 5.0),
+                  const SizedBox(width: 5.0),
                   AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     child: Text(
                       '$minesLeft',
                       key: ValueKey<int>(minesLeft),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.red,
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,

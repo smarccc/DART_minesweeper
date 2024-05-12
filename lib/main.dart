@@ -56,7 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   return Scaffold(
     backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
     appBar: AppBar(
-      title: Text(' '),
+      title: const Text(' '),
       centerTitle: true,
     ),
     body: Column(
@@ -116,7 +116,7 @@ class MainMenuScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DifficultySelectionScreen()),
+                  MaterialPageRoute(builder: (context) => const DifficultySelectionScreen()),
                 );
               },
               child: const Text('Play'),
@@ -153,7 +153,7 @@ class DifficultySelectionScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MinesweeperScreen(
+                    builder: (context) => const MinesweeperScreen(
                       rows: 4,
                       cols: 4,
                       totalMines: 4,

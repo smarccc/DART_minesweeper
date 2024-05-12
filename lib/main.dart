@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
 void main() {
@@ -199,7 +199,6 @@ class MinesweeperScreen extends StatefulWidget {
 }
 
 class _MinesweeperScreenState extends State<MinesweeperScreen> {
-  // Remaining code for MinesweeperScreen
   late int rows;
   late int cols;
   late int totalMines;
@@ -386,7 +385,11 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                       ? AnimatedOpacity(
                           opacity: 1.0,
                           duration: Duration(milliseconds: 500),
-                          child: Icon(Icons.dangerous),
+                          child: Image.asset(
+                            'assets/bomb-icon-2.png',
+                            width: 36,
+                            height: 36,
+                          ),
                         )
                       : Text(
                           getNeighborMines(row, col).toString(),

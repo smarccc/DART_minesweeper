@@ -48,41 +48,50 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Minesweeper'),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Text(
-                'Minesweeper',
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-              ),
+ Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
+    appBar: AppBar(
+      title: Text('MINE KA NA'),
+      centerTitle: true,
+    ),
+    body: Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: Image.asset(
+              'assets/miner-removebg-preview.png', // Replace 'assets/minesweeper_logo.png' with the path to your image asset
+              width: 350, // Adjust the width of the image as needed
+              height: 350, // Adjust the height of the image as needed
             ),
           ),
-          SizedBox(
-            height: 10.0, // Adjust the height of the progress bar
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              value: _progress,
+        ),
+        SizedBox(
+          height: 20.0, // Adjust the height of the progress bar
+          child: LinearProgressIndicator(
+            backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the progress bar
+            valueColor: AlwaysStoppedAnimation<Color>(const Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
+            value: _progress, // Set the value of the progress bar
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            '${(_progress * 100).toStringAsFixed(0)}%', // Display the progress percentage
+            style: TextStyle(
+              color: Colors.red, // Set the text color to yellow
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '${(_progress * 100).toStringAsFixed(0)}%',
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
+
 }
 
 class MainMenuScreen extends StatelessWidget {
@@ -257,6 +266,8 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     startTime = DateTime.now();
     secondsElapsed = 0;
   }
+
+  //-------------------------------------------------------------------------win dialog
 
   void showGameOverDialog(String message) {
     showDialog(
@@ -465,69 +476,75 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('FlutterSweeper'),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.timer,
-                  size: 20.0,
-                ),
-                SizedBox(width: 4.0),
-                Text(
-                  getFormattedTime(secondsElapsed),
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('BOMBA'),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/timer.png', // Replace with your timer icon asset path
+                    width: 30.0, // Adjust width as needed
+                    height: 30.0, // Adjust height as needed
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.dangerous,
-                  size: 20.0,
-                ),
-                SizedBox(width: 4.0),
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  child: Text(
-                    '$minesLeft',
-                    key: ValueKey<int>(minesLeft),
+                  SizedBox(width: 5.0),
+                  Text(
+                    getFormattedTime(secondsElapsed),
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+              SizedBox(width: 20.0), // Adjust spacing between timer and dangerous icon
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/bomb-icon-2.png', // Replace with your dangerous icon asset path
+                    width: 30.0, // Adjust width as needed
+                    height: 30.0, // Adjust height as needed
+                  ),
+                  SizedBox(width: 5.0),
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    child: Text(
+                      '$minesLeft',
+                      key: ValueKey<int>(minesLeft),
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(allRevealed ? Icons.visibility_off : Icons.visibility),
-            onPressed: toggleRevealAll,
-            tooltip: allRevealed ? 'Hide All' : 'Reveal All',
-          ),
-        ],
-      ),
-      body: AbsorbPointer(
-        absorbing: gameover,
-        child: Center(
-          child: buildGrid(),
         ),
       ),
-    );
-  }
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(allRevealed ? Icons.visibility_off : Icons.visibility),
+          onPressed: toggleRevealAll,
+          tooltip: allRevealed ? 'Hide All' : 'Reveal All',
+        ),
+      ],
+    ),
+    body: AbsorbPointer(
+      absorbing: gameover,
+      child: Center(
+        child: buildGrid(),
+      ),
+    ),
+  );
+}
+
 }

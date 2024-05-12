@@ -52,7 +52,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   return Scaffold(
     backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
     appBar: AppBar(
-      title: Text('MINE KA NA'),
+      title: Text(''),
       centerTitle: true,
     ),
     body: Column(
@@ -78,8 +78,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             '${(_progress * 100).toStringAsFixed(0)}%', // Display the progress percentage
-            style: TextStyle(
-              color: Colors.red, // Set the text color to yellow
+            style: const TextStyle(
+              color:Color.fromRGBO(189, 91, 64, 1), // Set the text color to yellow
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
@@ -370,7 +370,10 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   }
 
   Widget buildGrid() {
-    return GridView.builder(
+  return Container(
+    alignment: Alignment.center,
+    padding: EdgeInsets.all(16.0), // Adjust the padding as needed
+    child: GridView.builder(
       shrinkWrap: true,
       itemCount: rows * cols,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -382,13 +385,14 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         return GestureDetector(
           onTap: () => revealTile(row, col),
           child: Container(
+            margin: EdgeInsets.all(4.0), // Add margin to each tile
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: Color.fromRGBO(189, 91, 64, 1)),
               color: revealed[row][col]
-                  ? Colors.grey[200]
+                  ? Color.fromARGB(255, 150, 82, 5)
                   : allRevealed
-                      ? Colors.grey[200]
-                      : Colors.white,
+                      ? Color.fromARGB(255, 21, 0, 202)
+                      : Color.fromARGB(255, 4, 230, 15),
             ),
             child: Center(
               child: revealed[row][col]
@@ -414,8 +418,10 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           ),
         );
       },
-    );
-  }
+    ),
+  );
+}
+
 
   int getNeighborMines(int row, int col) {
     int count = 0;
@@ -436,23 +442,23 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   Color getTextColor(int numMines) {
     switch (numMines) {
       case 1:
-        return Colors.blue;
+        return Colors.white;
       case 2:
-        return Colors.green;
+        return Colors.white;
       case 3:
-        return Colors.red;
+        return Colors.white;
       case 4:
-        return Colors.purple;
+        return Colors.white;
       case 5:
-        return Colors.orange;
+        return Colors.white;
       case 6:
-        return Colors.teal;
+        return Colors.white;
       case 7:
-        return Colors.yellow;
-      case 8:
-        return Colors.grey;
-      default:
         return Colors.black;
+      case 8:
+        return Colors.white;
+      default:
+        return Colors.white;
     }
   }
 
@@ -475,7 +481,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: Text('BOMBA'),

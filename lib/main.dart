@@ -132,19 +132,19 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     }
   }
 
-  void showGameOverDialog() {
+  void showGameOverDialog(String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Game Over'),
-          content: Text('You hit a mine!'),
+          title: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() {
                   gameover = false;
+                  allRevealed = false;
                   initializeGame();
                 });
               },
@@ -162,10 +162,23 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
       revealed[row][col] = true;
       if (hasMine[row][col]) {
         gameover = true;
-        showGameOverDialog(); // Show game over dialog
+        showGameOverDialog('Game Over - You hit a mine!');
         return;
       }
-      // Check neighboring tiles
+      // Check if all safe tiles are revealed
+      int revealedSafeTiles = 0;
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          if (!hasMine[i][j] && revealed[i][j]) {
+            revealedSafeTiles++;
+          }
+        }
+      }
+      if (revealedSafeTiles == (rows * cols) - totalMines) {
+        gameover = true;
+        showGameOverDialog('Congratulations! You won!');
+      }
+      // Check neighboring tiles for mines
       int adjacentMines = 0;
       for (int dr = -1; dr <= 1; dr++) {
         for (int dc = -1; dc <= 1; dc++) {

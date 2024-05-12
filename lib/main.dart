@@ -107,8 +107,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   bool gameover = false;
   bool allRevealed = false;
   int minesLeft = 0;
-  int secondsElapsed = 0;
+  late DateTime startTime;
   late Timer _timer;
+  late int secondsElapsed;
 
   @override
   void initState() {
@@ -142,6 +143,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         minesPlaced++;
       }
     }
+
+    startTime = DateTime.now();
+    secondsElapsed = 0;
   }
 
   void showGameOverDialog(String message) {
@@ -157,9 +161,8 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                 setState(() {
                   gameover = false;
                   allRevealed = false;
-                  secondsElapsed = 0;
                   initializeGame();
-                  startTimer();
+                  startTimer(); // Restart the timer
                 });
               },
               child: Text('Play Again'),
@@ -178,6 +181,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         gameover = true;
         revealAllMines();
         showGameOverDialog('Game Over - You hit a mine!');
+        _timer.cancel();
         return;
       }
       // Check if all safe tiles are revealed
@@ -333,10 +337,13 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
 
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var currentTime = DateTime.now();
       setState(() {
-        secondsElapsed++;
+        secondsElapsed = currentTime.difference(startTime).inSeconds;
       });
     });
+    // Adjust start time to account for elapsed time when restarting
+    startTime = DateTime.now().subtract(Duration(seconds: secondsElapsed));
   }
 
   @override

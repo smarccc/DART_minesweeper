@@ -40,7 +40,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           // Navigate to next screen after loading
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => DifficultySelectionScreen()),
+            MaterialPageRoute(builder: (context) => MainMenuScreen()),
           );
         }
       });
@@ -51,7 +51,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MP GAME'),
+        title: Text('Minesweeper'),
         centerTitle: true,
       ),
       body: Column(
@@ -64,10 +64,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
               ),
             ),
           ),
-          LinearProgressIndicator(
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 229, 245, 3)),
-            value: _progress,
+          SizedBox(
+            height: 10.0, // Adjust the height of the progress bar
+            child: LinearProgressIndicator(
+              backgroundColor: Colors.grey[300],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              value: _progress,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -77,6 +80,40 @@ class _LoadingScreenState extends State<LoadingScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MainMenuScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Main Menu'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DifficultySelectionScreen()),
+                );
+              },
+              child: Text('Play'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to settings screen
+              },
+              child: Text('Settings'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -162,6 +199,7 @@ class MinesweeperScreen extends StatefulWidget {
 }
 
 class _MinesweeperScreenState extends State<MinesweeperScreen> {
+  // Remaining code for MinesweeperScreen
   late int rows;
   late int cols;
   late int totalMines;
@@ -256,7 +294,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         revealAllMines();
         showGameOverDialog('Game Over - You hit a mine!');
         _timer.cancel();
-        _bombPlayer.open(Audio('assets/bomb_sound.mp3'));
+        _bombPlayer.open(Audio('assets/bomb1.wav'));
         return;
       }
       int revealedSafeTiles = 0;
@@ -294,7 +332,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           }
         }
       }
-      _tilePressPlayer.open(Audio('assets/note1.wav'));
+      _tilePressPlayer.open(Audio('assets/safe1.wav'));
     });
   }
 

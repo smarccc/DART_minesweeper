@@ -105,6 +105,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   late List<List<bool>> hasMine;
   bool gameover = false;
   bool allRevealed = false;
+  int minesLeft = 0;
 
   @override
   void initState() {
@@ -112,6 +113,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     rows = widget.rows;
     cols = widget.cols;
     totalMines = widget.totalMines;
+    minesLeft = totalMines;
     initializeGame();
   }
 
@@ -162,6 +164,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
       revealed[row][col] = true;
       if (hasMine[row][col]) {
         gameover = true;
+        revealAllMines();
         showGameOverDialog('Game Over - You hit a mine!');
         return;
       }
@@ -200,6 +203,18 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
             if (r >= 0 && r < rows && c >= 0 && c < cols) {
               revealTile(r, c);
             }
+          }
+        }
+      }
+    });
+  }
+
+  void revealAllMines() {
+    setState(() {
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          if (hasMine[i][j]) {
+            revealed[i][j] = true;
           }
         }
       }
@@ -302,6 +317,20 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
       appBar: AppBar(
         title: Text('FlutterSweeper'),
         actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                Text(
+                  'Mines: $minesLeft',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           IconButton(
             icon: Icon(allRevealed ? Icons.visibility_off : Icons.visibility),
             onPressed: toggleRevealAll,

@@ -150,6 +150,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
 
   void showGameOverDialog(String message) {
     showDialog(
+      barrierDismissible: false, // Set barrierDismissible to false
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -401,8 +402,11 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: buildGrid(),
+      body: AbsorbPointer( // AbsorbPointer to disable interaction with the game screen
+        absorbing: gameover, // AbsorbPointer is active when gameover is true
+        child: Center(
+          child: buildGrid(),
+        ),
       ),
     );
   }

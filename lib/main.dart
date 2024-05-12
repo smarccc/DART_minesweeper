@@ -104,6 +104,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   late List<List<bool>> revealed;
   late List<List<bool>> hasMine;
   bool gameover = false;
+  bool allRevealed = false;
 
   @override
   void initState() {
@@ -192,6 +193,28 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     });
   }
 
+  void revealAll() {
+    setState(() {
+      allRevealed = true;
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          revealed[i][j] = true;
+        }
+      }
+    });
+  }
+
+  void hideAll() {
+    setState(() {
+      allRevealed = false;
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          revealed[i][j] = false;
+        }
+      }
+    });
+  }
+
   Widget buildGrid() {
     return GridView.builder(
       shrinkWrap: true,
@@ -207,7 +230,11 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
-              color: revealed[row][col] ? Colors.grey[200] : Colors.white,
+              color: revealed[row][col]
+                  ? Colors.grey[200]
+                  : allRevealed
+                      ? Colors.grey[200]
+                      : Colors.white,
             ),
             child: Center(
               child: revealed[row][col]
@@ -272,6 +299,18 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('FlutterSweeper'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.visibility),
+            onPressed: revealAll,
+            tooltip: 'Reveal All',
+          ),
+          IconButton(
+            icon: Icon(Icons.visibility_off),
+            onPressed: hideAll,
+            tooltip: 'Hide All',
+          ),
+        ],
       ),
       body: Center(
         child: buildGrid(),

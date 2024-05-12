@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 void main() {
   runApp(MinesweeperApp());
@@ -110,6 +111,8 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   late DateTime startTime;
   late Timer _timer;
   late int secondsElapsed;
+  late AssetsAudioPlayer _tilePressPlayer;
+  late AssetsAudioPlayer _bombPlayer;
 
   @override
   void initState() {
@@ -120,11 +123,19 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     minesLeft = totalMines;
     initializeGame();
     startTimer();
+    _initializeSounds();
+  }
+
+  void _initializeSounds() {
+    _tilePressPlayer = AssetsAudioPlayer();
+    _bombPlayer = AssetsAudioPlayer();
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _tilePressPlayer.dispose();
+    _bombPlayer.dispose();
     super.dispose();
   }
 
@@ -150,7 +161,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
 
   void showGameOverDialog(String message) {
     showDialog(
-      barrierDismissible: false, // Set barrierDismissible to false
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -163,7 +174,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                   gameover = false;
                   allRevealed = false;
                   initializeGame();
-                  startTimer(); // Restart the timer
+                  startTimer();
                 });
               },
               child: Text('Play Again'),
@@ -183,9 +194,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         revealAllMines();
         showGameOverDialog('Game Over - You hit a mine!');
         _timer.cancel();
+        _bombPlayer.open(Audio('assets/bomb_sound.mp3'));
         return;
       }
-      // Check if all safe tiles are revealed
       int revealedSafeTiles = 0;
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -198,7 +209,6 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         gameover = true;
         showGameOverDialog('Congratulations! You won!');
       }
-      // Check neighboring tiles for mines
       int adjacentMines = 0;
       for (int dr = -1; dr <= 1; dr++) {
         for (int dc = -1; dc <= 1; dc++) {
@@ -212,7 +222,6 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         }
       }
       if (adjacentMines == 0) {
-        // Automatically reveal neighboring tiles if no adjacent mines
         for (int dr = -1; dr <= 1; dr++) {
           for (int dc = -1; dc <= 1; dc++) {
             int r = row + dr;
@@ -223,6 +232,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           }
         }
       }
+      _tilePressPlayer.open(Audio('assets/note1.wav'));
     });
   }
 
@@ -273,7 +283,11 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
             child: Center(
               child: revealed[row][col]
                   ? hasMine[row][col]
-                      ? Icon(Icons.dangerous)
+                      ? AnimatedOpacity(
+                          opacity: 1.0,
+                          duration: Duration(milliseconds: 500),
+                          child: Icon(Icons.dangerous),
+                        )
                       : Text(
                           getNeighborMines(row, col).toString(),
                           style: TextStyle(
@@ -343,7 +357,6 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         secondsElapsed = currentTime.difference(startTime).inSeconds;
       });
     });
-    // Adjust start time to account for elapsed time when restarting
     startTime = DateTime.now().subtract(Duration(seconds: secondsElapsed));
   }
 
@@ -385,11 +398,15 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                   size: 20.0,
                 ),
                 SizedBox(width: 4.0),
-                Text(
-                  '$minesLeft',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 500),
+                  child: Text(
+                    '$minesLeft',
+                    key: ValueKey<int>(minesLeft),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -402,8 +419,8 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           ),
         ],
       ),
-      body: AbsorbPointer( // AbsorbPointer to disable interaction with the game screen
-        absorbing: gameover, // AbsorbPointer is active when gameover is true
+      body: AbsorbPointer(
+        absorbing: gameover,
         child: Center(
           child: buildGrid(),
         ),

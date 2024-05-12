@@ -54,15 +54,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
  Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
+    backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the scaffold
     appBar: AppBar(
       title: const Text(
         'Minesweeper',
         style: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, 1),
           fontSize: 30,
         ),),
       centerTitle: true,
-      backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
+      backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the scaffold
     ),
     body: Column(
       children: [
@@ -81,8 +82,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   child: Padding(
     padding: EdgeInsets.symmetric(horizontal: 20.0), // Add left and right padding
     child: LinearProgressIndicator(
-      backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the progress bar
-      valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
+      backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the progress bar
+      valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 255, 255, 1)), // Set the value color of the progress bar to black
       value: _progress, // Set the value of the progress bar
     ),
   ),
@@ -94,7 +95,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             
             '${(_progress * 100).toStringAsFixed(0)}%', // Display the progress percentage
             style: const TextStyle(
-              color:Color.fromRGBO(189, 91, 64, 1), // Set the text color to yellow
+              color:Color.fromRGBO(255, 255, 255, 1), // Set the text color to yellow
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
@@ -159,7 +160,7 @@ class DifficultySelectionScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -172,9 +173,13 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Easy'),
+               child: Image.asset(
+                'assets/easy-removebg-preview.png', // Path to the image for Medium
+                 width: 420, // Adjust width as needed
+                height: 60,// Adjust height as needed
+              ),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -187,9 +192,13 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Medium'),
+               child: Image.asset(
+                'assets/medium-removebg-preview.png', // Path to the image for Medium
+                width: 420, // Adjust width as needed
+                height: 60, // Adjust height as needed
+              ),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -202,7 +211,11 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Hard'),
+                child: Image.asset(
+                'assets/hard-removebg-preview.png', // Path to the image for Medium
+                width: 420, // Adjust width as needed
+                height: 60, // Adjust height as needed
+              ),
             ),
           ],
         ),
@@ -406,12 +419,12 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
           child: Container(
             margin: const EdgeInsets.all(0.5), // Add margin to each tile
             decoration: BoxDecoration(
-              border: Border.all(color: const Color.fromRGBO(189, 91, 64, 1)),
+              border: Border.all(color: const Color.fromRGBO(74, 38, 24, 1)),
               color: revealed[row][col]
                   ? const Color.fromARGB(255, 150, 82, 5)
                   : allRevealed
                       ? const Color.fromARGB(255, 21, 0, 202)
-                      : const Color.fromARGB(255, 4, 230, 15),
+                      : const Color.fromRGBO(2, 102, 50, 1),
             ),
             child: Center(
               child: revealed[row][col]

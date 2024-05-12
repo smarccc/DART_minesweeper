@@ -56,8 +56,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
   return Scaffold(
     backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
     appBar: AppBar(
-      title: const Text(' '),
+      title: const Text(
+        'Minesweeper',
+        style: TextStyle(
+          fontSize: 30,
+        ),),
       centerTitle: true,
+      backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the scaffold
     ),
     body: Column(
       children: [
@@ -70,17 +75,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
             ),
           ),
         ),
-        SizedBox(
-          height: 20.0, // Adjust the height of the progress bar
-          child: LinearProgressIndicator(
-            backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the progress bar
-            valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
-            value: _progress, // Set the value of the progress bar
-          ),
-        ),
+        
+       SizedBox(
+  height: 20.0, // Adjust the height of the progress bar
+  child: Padding(
+    padding: EdgeInsets.symmetric(horizontal: 20.0), // Add left and right padding
+    child: LinearProgressIndicator(
+      backgroundColor: const Color.fromARGB(255, 231, 210, 14), // Set the background color of the progress bar
+      valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(96, 107, 129, 1)), // Set the value color of the progress bar to black
+      value: _progress, // Set the value of the progress bar
+    ),
+  ),
+),
         Padding(
           padding: const EdgeInsets.all(8.0),
+          
           child: Text(
+            
             '${(_progress * 100).toStringAsFixed(0)}%', // Display the progress percentage
             style: const TextStyle(
               color:Color.fromRGBO(189, 91, 64, 1), // Set the text color to yellow
@@ -380,7 +391,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   Widget buildGrid() {
   return Container(
     alignment: Alignment.center,
-    padding: const EdgeInsets.all(16.0), // Adjust the padding as needed
+    padding: const EdgeInsets.all(30.0), // Adjust the padding as needed
     child: GridView.builder(
       shrinkWrap: true,
       itemCount: rows * cols,
@@ -393,7 +404,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         return GestureDetector(
           onTap: () => revealTile(row, col),
           child: Container(
-            margin: const EdgeInsets.all(4.0), // Add margin to each tile
+            margin: const EdgeInsets.all(0.5), // Add margin to each tile
             decoration: BoxDecoration(
               border: Border.all(color: const Color.fromRGBO(189, 91, 64, 1)),
               color: revealed[row][col]

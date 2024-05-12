@@ -193,23 +193,12 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     });
   }
 
-  void revealAll() {
+  void toggleRevealAll() {
     setState(() {
-      allRevealed = true;
+      allRevealed = !allRevealed;
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-          revealed[i][j] = true;
-        }
-      }
-    });
-  }
-
-  void hideAll() {
-    setState(() {
-      allRevealed = false;
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-          revealed[i][j] = false;
+          revealed[i][j] = allRevealed;
         }
       }
     });
@@ -301,14 +290,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         title: Text('FlutterSweeper'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.visibility),
-            onPressed: revealAll,
-            tooltip: 'Reveal All',
-          ),
-          IconButton(
-            icon: Icon(Icons.visibility_off),
-            onPressed: hideAll,
-            tooltip: 'Hide All',
+            icon: Icon(allRevealed ? Icons.visibility_off : Icons.visibility),
+            onPressed: toggleRevealAll,
+            tooltip: allRevealed ? 'Hide All' : 'Reveal All',
           ),
         ],
       ),

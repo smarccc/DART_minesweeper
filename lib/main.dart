@@ -15,7 +15,69 @@ class MinesweeperApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DifficultySelectionScreen(),
+      home: LoadingScreen(),
+    );
+  }
+}
+
+class LoadingScreen extends StatefulWidget {
+  @override
+  _LoadingScreenState createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  double _progress = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Simulate loading time with a delay
+    Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
+      setState(() {
+        _progress += 0.01;
+        if (_progress >= 1.0) {
+          timer.cancel();
+          // Navigate to next screen after loading
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DifficultySelectionScreen()),
+          );
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MP GAME'),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Text(
+                'Minesweeper',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          LinearProgressIndicator(
+            backgroundColor: Colors.grey[300],
+            valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 229, 245, 3)),
+            value: _progress,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '${(_progress * 100).toStringAsFixed(0)}%',
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

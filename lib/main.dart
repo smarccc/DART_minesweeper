@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -106,6 +107,8 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   bool gameover = false;
   bool allRevealed = false;
   int minesLeft = 0;
+  int secondsElapsed = 0;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -115,6 +118,13 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     totalMines = widget.totalMines;
     minesLeft = totalMines;
     initializeGame();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void initializeGame() {
@@ -147,7 +157,9 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
                 setState(() {
                   gameover = false;
                   allRevealed = false;
+                  secondsElapsed = 0;
                   initializeGame();
+                  startTimer();
                 });
               },
               child: Text('Play Again'),
@@ -311,18 +323,62 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
     }
   }
 
+  String getFormattedTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = remainingSeconds.toString().padLeft(2, '0');
+    return '$minutesStr:$secondsStr';
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        secondsElapsed++;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('FlutterSweeper'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(20),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.timer,
+                  size: 20.0,
+                ),
+                SizedBox(width: 4.0),
+                Text(
+                  getFormattedTime(secondsElapsed),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.only(right: 16.0),
             child: Row(
               children: [
+                Icon(
+                  Icons.dangerous,
+                  size: 20.0,
+                ),
+                SizedBox(width: 4.0),
                 Text(
-                  'Mines: $minesLeft',
+                  '$minesLeft',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,

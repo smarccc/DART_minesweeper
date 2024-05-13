@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:flutter/services.dart';
+import 'dart:ui'; 
 
 void main() {
   runApp(const MinesweeperApp());
@@ -80,7 +82,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
        SizedBox(
   height: 20.0, // Adjust the height of the progress bar
   child: Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.0), // Add left and right padding
+    padding: const EdgeInsets.symmetric(horizontal: 20.0), // Add left and right padding
     child: LinearProgressIndicator(
       backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the progress bar
       valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 255, 255, 1)), // Set the value color of the progress bar to black
@@ -111,7 +113,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 }
 
 class MainMenuScreen extends StatelessWidget {
-  const MainMenuScreen({super.key});
+  const MainMenuScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,20 +126,68 @@ class MainMenuScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const DifficultySelectionScreen()),
                 );
               },
-              child: const Text('Play'),
+              child: Image.asset(
+                'assets/play-removebg-preview.png',
+                width: 300, // Adjust width as needed
+                height: 70, // Adjust height as needed
+              ),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
-                // Navigate to settings screen
+                // Show options dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return OptionsDialog();
+                  },
+                );
               },
-              child: const Text('Settings'),
+              child: Image.asset(
+                'assets/options-removebg-preview.png',
+                width: 300, // Adjust width as needed
+                height: 70, // Adjust height as needed
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Show confirmation dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Confirmation"),
+                      content: Text("Are you sure you want to quit?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close dialog
+                          },
+                          child: Text("No"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Quit the application
+                            SystemNavigator.pop(); // This exits the app
+                          },
+                          child: Text("Yes")  
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Image.asset(
+                'assets/quit-removebg-preview.png',
+                width: 300, // Adjust width as needed
+                height: 70, // Adjust height as needed
+              ),
             ),
           ],
         ),
@@ -145,6 +195,90 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 }
+
+class OptionsDialog extends StatefulWidget {
+  const OptionsDialog({Key? key}) : super(key: key);
+
+  @override
+  _OptionsDialogState createState() => _OptionsDialogState();
+}
+
+class _OptionsDialogState extends State<OptionsDialog> {
+  bool _isMuted = false;
+  double _volumeLevel = 0.5; // Default volume level
+  double _previousVolume = 0.5; // Store the previous volume level
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Options"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Sound Settings:"),
+          ListTile(
+            title: Text("Mute"),
+            onTap: () {
+              setState(() {
+                _isMuted = !_isMuted;
+                if (_isMuted) {
+                  _previousVolume = _volumeLevel; // Store current volume before muting
+                  _volumeLevel = 0.0; // Mute
+                } else {
+                  _volumeLevel = _previousVolume; // Restore volume before muting
+                }
+                _setVolume(_volumeLevel);
+              });
+            },
+            trailing: _isMuted ? Icon(Icons.volume_off) : Icon(Icons.volume_up),
+          ),
+          Slider(
+            value: _volumeLevel,
+            min: 0.0,
+            max: 1.0,
+            onChanged: (value) {
+              setState(() {
+                _volumeLevel = value;
+                if (!_isMuted) {
+                  _previousVolume = _volumeLevel; // Update previous volume only if not muted
+                }
+                _setVolume(_volumeLevel);
+              });
+            },
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Save changes and close dialog
+            _saveChanges();
+            Navigator.of(context).pop();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    );
+  }
+
+  void _saveChanges() {
+    // Save changes to preferences, database, or wherever appropriate
+    // For simplicity, we'll just print the values here
+    print("Volume Level: $_volumeLevel");
+    print("Muted: $_isMuted");
+  }
+
+  void _setVolume(double volume) {
+    MethodChannel('flutter_volume_controller')
+        .invokeMethod('setVolume', {'volume': volume})
+        .catchError((error) {
+      print("Error setting volume: $error");
+    });
+  }
+}
+
+
 
 class DifficultySelectionScreen extends StatelessWidget {
   const DifficultySelectionScreen({super.key});

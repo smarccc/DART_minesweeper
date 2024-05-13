@@ -134,7 +134,7 @@ class MainMenuScreen extends StatelessWidget {
                 );
               },
               child: Image.asset(
-                'assets/play-removebg-preview.png',
+                'assets/play-removebg-preview (1).png',
                 width: 300, // Adjust width as needed
                 height: 70, // Adjust height as needed
               ),
@@ -150,7 +150,7 @@ class MainMenuScreen extends StatelessWidget {
                 );
               },
               child: Image.asset(
-                'assets/options-removebg-preview.png',
+                'assets/options-removebg-preview (1).png',
                 width: 300, // Adjust width as needed
                 height: 70, // Adjust height as needed
               ),
@@ -184,7 +184,7 @@ class MainMenuScreen extends StatelessWidget {
                 );
               },
               child: Image.asset(
-                'assets/quit-removebg-preview.png',
+                'assets/quit-removebg-preview (1).png',
                 width: 300, // Adjust width as needed
                 height: 70, // Adjust height as needed
               ),

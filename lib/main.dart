@@ -270,7 +270,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
   }
 
   void _setVolume(double volume) {
-    MethodChannel('flutter_volume_controller')
+    const MethodChannel('flutter_volume_controller')
         .invokeMethod('setVolume', {'volume': volume})
         .catchError((error) {
       print("Error setting volume: $error");
@@ -284,78 +284,89 @@ class DifficultySelectionScreen extends StatelessWidget {
   const DifficultySelectionScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Choose Difficulty'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      rows: 4,
-                      cols: 4,
-                      totalMines: 4,
-                    ),
-                  ),
-                );
-              },
-               child: Image.asset(
-                'assets/easy-removebg-preview.png', // Path to the image for Medium
-                 width: 420, // Adjust width as needed
-                height: 60,// Adjust height as needed
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      rows: 6,
-                      cols: 6,
-                      totalMines: 10,
-                    ),
-                  ),
-                );
-              },
-               child: Image.asset(
-                'assets/medium-removebg-preview.png', // Path to the image for Medium
-                width: 420, // Adjust width as needed
-                height: 60, // Adjust height as needed
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MinesweeperScreen(
-                      rows: 10,
-                      cols: 10,
-                      totalMines: 20,
-                    ),
-                  ),
-                );
-              },
-                child: Image.asset(
-                'assets/hard-removebg-preview.png', // Path to the image for Medium
-                width: 420, // Adjust width as needed
-                height: 60, // Adjust height as needed
-              ),
-            ),
-          ],
+ Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Choose Difficulty'),
+      leading: IconButton(
+        icon: Image.asset(
+          'assets/back-removebg-preview.png', // Path to your custom back button image
+          width: 50, // Adjust width as needed
+          height: 50, // Adjust height as needed
         ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
-    );
-  }
+    ),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MinesweeperScreen(
+                    rows: 4,
+                    cols: 4,
+                    totalMines: 4,
+                  ),
+                ),
+              );
+            },
+             child: Image.asset(
+              'assets/easy-removebg-preview.png', // Path to the image for Easy
+               width: 420, // Adjust width as needed
+              height: 60,// Adjust height as needed
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MinesweeperScreen(
+                    rows: 6,
+                    cols: 6,
+                    totalMines: 10,
+                  ),
+                ),
+              );
+            },
+             child: Image.asset(
+              'assets/medium-removebg-preview.png', // Path to the image for Medium
+              width: 420, // Adjust width as needed
+              height: 60, // Adjust height as needed
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MinesweeperScreen(
+                    rows: 10,
+                    cols: 10,
+                    totalMines: 20,
+                  ),
+                ),
+              );
+            },
+              child: Image.asset(
+              'assets/hard-removebg-preview.png', // Path to the image for Hard
+              width: 420, // Adjust width as needed
+              height: 60, // Adjust height as needed
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 }
 
 class MinesweeperScreen extends StatefulWidget {
@@ -651,6 +662,16 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('BOMBA'),
+      leading: IconButton(
+        icon: Image.asset(
+          'assets/back-removebg-preview.png', // Replace with your custom back button asset path
+          width: 50.0, // Adjust width as needed
+          height: 50.0, // Adjust height as needed
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(120),
         child: Padding(
@@ -718,5 +739,6 @@ Widget build(BuildContext context) {
     ),
   );
 }
+
 
 }

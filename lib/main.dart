@@ -62,7 +62,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         'Minesweeper',
         style: TextStyle(
           color: Color.fromRGBO(255, 255, 255, 1),
-          fontSize: 30,
+          fontSize: 25,
+          fontWeight: FontWeight.bold
         ),),
       centerTitle: true,
       backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
@@ -121,7 +122,12 @@ class MainMenuScreen extends StatelessWidget {
       backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
-        title: const Text('Main Menu'),
+        title: const Text('Main Menu',
+         style: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, 1),
+          fontSize: 25,
+          fontWeight: FontWeight.bold
+        ),),
       ),
       body: Center(
         child: Column(
@@ -296,7 +302,13 @@ class DifficultySelectionScreen extends StatelessWidget {
     backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
     appBar: AppBar(
       backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
-      title: const Text('Choose Difficulty'),
+      title: const Text(
+        'Choose Difficulty',
+       style: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, 1),
+          fontSize: 25,
+          fontWeight: FontWeight.bold
+        ),),
       leading: IconButton(
         icon: Image.asset(
           'assets/back-removebg-preview.png', // Path to your custom back button image

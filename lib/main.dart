@@ -56,7 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
  Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the scaffold
+    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
     appBar: AppBar(
       title: const Text(
         'Minesweeper',
@@ -65,7 +65,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           fontSize: 30,
         ),),
       centerTitle: true,
-      backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the scaffold
+      backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
     ),
     body: Column(
       children: [
@@ -118,7 +118,9 @@ class MainMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
       appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
         title: const Text('Main Menu'),
       ),
       body: Center(
@@ -145,7 +147,7 @@ class MainMenuScreen extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return OptionsDialog();
+                    return const OptionsDialog();
                   },
                 );
               },
@@ -162,21 +164,21 @@ class MainMenuScreen extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("Confirmation"),
-                      content: Text("Are you sure you want to quit?"),
+                      title: const Text("Confirmation"),
+                      content: const Text("Are you sure you want to quit?"),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close dialog
                           },
-                          child: Text("No"),
+                          child: const Text("No"),
                         ),
                         TextButton(
                           onPressed: () {
                             // Quit the application
                             SystemNavigator.pop(); // This exits the app
                           },
-                          child: Text("Yes")  
+                          child: const Text("Yes")  
                         ),
                       ],
                     );
@@ -196,6 +198,8 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
+
+//---------------------------------------------------------------------------------------------------------------------------------
 class OptionsDialog extends StatefulWidget {
   const OptionsDialog({Key? key}) : super(key: key);
 
@@ -211,12 +215,12 @@ class _OptionsDialogState extends State<OptionsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Options"),
+      title: const Text("Options"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Sound Settings:"),
+          const Text("Sound Settings:"),
           ListTile(
             title: Text("Mute"),
             onTap: () {
@@ -231,7 +235,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                 _setVolume(_volumeLevel);
               });
             },
-            trailing: _isMuted ? Icon(Icons.volume_off) : Icon(Icons.volume_up),
+            trailing: _isMuted ? const Icon(Icons.volume_off) : const Icon(Icons.volume_up),
           ),
           Slider(
             value: _volumeLevel,
@@ -256,12 +260,13 @@ class _OptionsDialogState extends State<OptionsDialog> {
             _saveChanges();
             Navigator.of(context).pop();
           },
-          child: Text("Close"),
+          child: const Text("Close"),
         ),
       ],
     );
   }
 
+  
   void _saveChanges() {
     // Save changes to preferences, database, or wherever appropriate
     // For simplicity, we'll just print the values here
@@ -278,6 +283,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
   }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+
 
 
 class DifficultySelectionScreen extends StatelessWidget {
@@ -286,7 +293,9 @@ class DifficultySelectionScreen extends StatelessWidget {
   @override
  Widget build(BuildContext context) {
   return Scaffold(
+    backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
     appBar: AppBar(
+      backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
       title: const Text('Choose Difficulty'),
       leading: IconButton(
         icon: Image.asset(
@@ -660,14 +669,18 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
+    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
     appBar: AppBar(
-      title: const Text('BOMBA'),
+      backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
+      title: const Text(''),
       leading: IconButton(
         icon: Image.asset(
+          
           'assets/back-removebg-preview.png', // Replace with your custom back button asset path
           width: 50.0, // Adjust width as needed
           height: 50.0, // Adjust height as needed
         ),
+        
         onPressed: () {
           Navigator.pop(context);
         },
@@ -683,14 +696,15 @@ Widget build(BuildContext context) {
                 children: [
                   Image.asset(
                     'assets/timer.png', // Replace with your timer icon asset path
-                    width: 30.0, // Adjust width as needed
-                    height: 30.0, // Adjust height as needed
+                    width: 40.0, // Adjust width as needed
+                    height: 40.0, // Adjust height as needed
                   ),
                   const SizedBox(width: 5.0),
                   Text(
                     getFormattedTime(secondsElapsed),
                     style: const TextStyle(
-                      fontSize: 18.0,
+                      color: Colors.white,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -701,8 +715,8 @@ Widget build(BuildContext context) {
                 children: [
                   Image.asset(
                     'assets/bomb-icon-2.png', // Replace with your dangerous icon asset path
-                    width: 30.0, // Adjust width as needed
-                    height: 30.0, // Adjust height as needed
+                    width: 40.0, // Adjust width as needed
+                    height: 40.0, // Adjust height as needed
                   ),
                   const SizedBox(width: 5.0),
                   AnimatedSwitcher(
@@ -711,8 +725,8 @@ Widget build(BuildContext context) {
                       '$minesLeft',
                       key: ValueKey<int>(minesLeft),
                       style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

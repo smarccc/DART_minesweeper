@@ -37,13 +37,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulate loading time with a delay
+   
     Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
       setState(() {
         _progress += 0.01;
         if (_progress >= 1.0) {
           timer.cancel();
-          // Navigate to next screen after loading
+        
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const MainMenuScreen()),
@@ -56,7 +56,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
  Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
+    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), 
     appBar: AppBar(
       title: const Text(
         'Minesweeper',
@@ -66,28 +66,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
           fontWeight: FontWeight.bold
         ),),
       centerTitle: true,
-      backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
+      backgroundColor: const Color.fromRGBO(207, 152, 23, 1), 
     ),
     body: Column(
       children: [
         Expanded(
           child: Center(
             child: Image.asset(
-              'assets/miner-removebg-preview.png', // Replace 'assets/minesweeper_logo.png' with the path to your image asset
-              width: 350, // Adjust the width of the image as needed
-              height: 350, // Adjust the height of the image as needed
+              'assets/miner-removebg-preview.png', 
+              width: 350, 
+              height: 350, 
             ),
           ),
         ),
         
        SizedBox(
-  height: 20.0, // Adjust the height of the progress bar
+  height: 20.0, 
   child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0), // Add left and right padding
+    padding: const EdgeInsets.symmetric(horizontal: 20.0),
     child: LinearProgressIndicator(
-      backgroundColor: const Color.fromRGBO(81, 60, 9, 1), // Set the background color of the progress bar
-      valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 255, 255, 1)), // Set the value color of the progress bar to black
-      value: _progress, // Set the value of the progress bar
+      backgroundColor: const Color.fromRGBO(81, 60, 9, 1), 
+      valueColor: const AlwaysStoppedAnimation<Color>(Color.fromRGBO(255, 255, 255, 1)), 
+      value: _progress, 
     ),
   ),
 ),
@@ -96,9 +96,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
           
           child: Text(
             
-            '${(_progress * 100).toStringAsFixed(0)}%', // Display the progress percentage
+            '${(_progress * 100).toStringAsFixed(0)}%', 
             style: const TextStyle(
-              color:Color.fromRGBO(255, 255, 255, 1), // Set the text color to yellow
+              color:Color.fromRGBO(255, 255, 255, 1), 
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
@@ -143,13 +143,13 @@ class MainMenuScreen extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/play-removebg-preview (1).png',
-                width: 300, // Adjust width as needed
-                height: 70, // Adjust height as needed
+                width: 300, 
+                height: 70, 
               ),
             ),
             TextButton(
               onPressed: () {
-                // Show options dialog
+               
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -159,13 +159,13 @@ class MainMenuScreen extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/options-removebg-preview (1).png',
-                width: 300, // Adjust width as needed
-                height: 70, // Adjust height as needed
+                width: 300, 
+                height: 70, 
               ),
             ),
             TextButton(
               onPressed: () {
-                // Show confirmation dialog
+                
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -175,14 +175,14 @@ class MainMenuScreen extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(); // Close dialog
+                            Navigator.of(context).pop(); 
                           },
                           child: const Text("No"),
                         ),
                         TextButton(
                           onPressed: () {
-                            // Quit the application
-                            SystemNavigator.pop(); // This exits the app
+                           
+                            SystemNavigator.pop(); 
                           },
                           child: const Text("Yes")  
                         ),
@@ -193,8 +193,8 @@ class MainMenuScreen extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/quit-removebg-preview (1).png',
-                width: 300, // Adjust width as needed
-                height: 70, // Adjust height as needed
+                width: 300, 
+                height: 70, 
               ),
             ),
           ],
@@ -215,8 +215,8 @@ class OptionsDialog extends StatefulWidget {
 
 class _OptionsDialogState extends State<OptionsDialog> {
   bool _isMuted = false;
-  double _volumeLevel = 0.5; // Default volume level
-  double _previousVolume = 0.5; // Store the previous volume level
+  double _volumeLevel = 0.5; 
+  double _previousVolume = 0.5; 
 
   @override
   Widget build(BuildContext context) {
@@ -233,10 +233,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
               setState(() {
                 _isMuted = !_isMuted;
                 if (_isMuted) {
-                  _previousVolume = _volumeLevel; // Store current volume before muting
-                  _volumeLevel = 0.0; // Mute
+                  _previousVolume = _volumeLevel; 
+                  _volumeLevel = 0.0; 
                 } else {
-                  _volumeLevel = _previousVolume; // Restore volume before muting
+                  _volumeLevel = _previousVolume; 
                 }
                 _setVolume(_volumeLevel);
               });
@@ -251,7 +251,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
               setState(() {
                 _volumeLevel = value;
                 if (!_isMuted) {
-                  _previousVolume = _volumeLevel; // Update previous volume only if not muted
+                  _previousVolume = _volumeLevel; 
                 }
                 _setVolume(_volumeLevel);
               });
@@ -262,7 +262,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            // Save changes and close dialog
+        
             _saveChanges();
             Navigator.of(context).pop();
           },
@@ -274,8 +274,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
   
   void _saveChanges() {
-    // Save changes to preferences, database, or wherever appropriate
-    // For simplicity, we'll just print the values here
+   
     print("Volume Level: $_volumeLevel");
     print("Muted: $_isMuted");
   }
@@ -311,9 +310,9 @@ class DifficultySelectionScreen extends StatelessWidget {
         ),),
       leading: IconButton(
         icon: Image.asset(
-          'assets/back-removebg-preview.png', // Path to your custom back button image
-          width: 50, // Adjust width as needed
-          height: 50, // Adjust height as needed
+          'assets/back-removebg-preview.png', 
+          width: 50, 
+          height: 50, 
         ),
         onPressed: () {
           Navigator.pop(context);
@@ -339,9 +338,9 @@ class DifficultySelectionScreen extends StatelessWidget {
               );
             },
              child: Image.asset(
-              'assets/easy-removebg-preview.png', // Path to the image for Easy
-               width: 420, // Adjust width as needed
-              height: 60,// Adjust height as needed
+              'assets/easy-removebg-preview.png', 
+               width: 420, 
+              height: 60,
             ),
           ),
           TextButton(
@@ -358,9 +357,9 @@ class DifficultySelectionScreen extends StatelessWidget {
               );
             },
              child: Image.asset(
-              'assets/medium-removebg-preview.png', // Path to the image for Medium
-              width: 420, // Adjust width as needed
-              height: 60, // Adjust height as needed
+              'assets/medium-removebg-preview.png', 
+              width: 420, 
+              height: 60, 
             ),
           ),
           TextButton(
@@ -377,9 +376,9 @@ class DifficultySelectionScreen extends StatelessWidget {
               );
             },
               child: Image.asset(
-              'assets/hard-removebg-preview.png', // Path to the image for Hard
-              width: 420, // Adjust width as needed
-              height: 60, // Adjust height as needed
+              'assets/hard-removebg-preview.png', 
+              width: 420, 
+              height: 60, 
             ),
           ),
         ],
@@ -570,7 +569,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   Widget buildGrid() {
   return Container(
     alignment: Alignment.center,
-    padding: const EdgeInsets.all(30.0), // Adjust the padding as needed
+    padding: const EdgeInsets.all(30.0), 
     child: GridView.builder(
       shrinkWrap: true,
       itemCount: rows * cols,
@@ -583,7 +582,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
         return GestureDetector(
           onTap: () => revealTile(row, col),
           child: Container(
-            margin: const EdgeInsets.all(0.5), // Add margin to each tile
+            margin: const EdgeInsets.all(0.5), 
             decoration: BoxDecoration(
               border: Border.all(color: const Color.fromRGBO(74, 38, 24, 1)),
               color: revealed[row][col]
@@ -681,16 +680,16 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), // Set the background color of the scaffold
+    backgroundColor: const Color.fromRGBO(207, 152, 23, 1), 
     appBar: AppBar(
       backgroundColor: const Color.fromRGBO(207, 152, 23, 1),
       title: const Text(''),
       leading: IconButton(
         icon: Image.asset(
           
-          'assets/back-removebg-preview.png', // Replace with your custom back button asset path
-          width: 50.0, // Adjust width as needed
-          height: 50.0, // Adjust height as needed
+          'assets/back-removebg-preview.png', 
+          width: 50.0, 
+          height: 50.0, 
         ),
         
         onPressed: () {
@@ -707,9 +706,9 @@ Widget build(BuildContext context) {
               Row(
                 children: [
                   Image.asset(
-                    'assets/timer.png', // Replace with your timer icon asset path
-                    width: 40.0, // Adjust width as needed
-                    height: 40.0, // Adjust height as needed
+                    'assets/timer.png', 
+                    width: 40.0, 
+                    height: 40.0, 
                   ),
                   const SizedBox(width: 5.0),
                   Text(
@@ -722,13 +721,13 @@ Widget build(BuildContext context) {
                   ),
                 ],
               ),
-              const SizedBox(width: 20.0), // Adjust spacing between timer and dangerous icon
+              const SizedBox(width: 20.0), 
               Row(
                 children: [
                   Image.asset(
-                    'assets/bomb-icon-2.png', // Replace with your dangerous icon asset path
-                    width: 40.0, // Adjust width as needed
-                    height: 40.0, // Adjust height as needed
+                    'assets/bomb-icon-2.png', 
+                    width: 40.0, 
+                    height: 40.0, 
                   ),
                   const SizedBox(width: 5.0),
                   AnimatedSwitcher(

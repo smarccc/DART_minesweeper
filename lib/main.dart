@@ -554,18 +554,23 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
       }
     });
   }
-
-  void toggleRevealAll() {
-    setState(() {
-      allRevealed = !allRevealed;
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+//---------------------------------------------------------------------------------------------------
+void toggleRevealBombs() {
+  setState(() {
+    // Toggle the allRevealed state
+    allRevealed = !allRevealed;
+    // Iterate through all rows
+    for (int i = 0; i < rows; i++) {
+      // Iterate through all columns
+      for (int j = 0; j < cols; j++) {
+        // Only reveal the cell if it contains a mine
+        if (hasMine[i][j]) {
           revealed[i][j] = allRevealed;
         }
       }
-    });
-  }
-
+    }
+  });
+}
   Widget buildGrid() {
   return Container(
     alignment: Alignment.center,
@@ -588,7 +593,7 @@ class _MinesweeperScreenState extends State<MinesweeperScreen> {
               color: revealed[row][col]
                   ? const Color.fromARGB(255, 150, 82, 5)
                   : allRevealed
-                      ? const Color.fromARGB(255, 21, 0, 202)
+                      ? const Color.fromRGBO(2, 102, 50, 0.9)
                       : const Color.fromRGBO(2, 102, 50, 1),
             ),
             child: Center(
@@ -751,7 +756,7 @@ Widget build(BuildContext context) {
       actions: <Widget>[
         IconButton(
           icon: Icon(allRevealed ? Icons.visibility_off : Icons.visibility),
-          onPressed: toggleRevealAll,
+          onPressed: toggleRevealBombs,
           tooltip: allRevealed ? 'Hide All' : 'Reveal All',
         ),
       ],
